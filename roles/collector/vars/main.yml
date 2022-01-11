@@ -1,0 +1,3 @@
+---
+# vars file for collector
+DOCKER_COMPOSE_VERSION: "1.29.2"

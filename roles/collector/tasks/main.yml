@@ -1,0 +1,39 @@
+---
+# tasks file for collector
+- name: Get OS Distribution
+  debug: msg="{{ ansible_distribution }}"
+
+- import_tasks: ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Create docker group
+  group:
+    name: "docker"
+    state: present
+
+- name: Adding user {{ ansible_user }} to docker group
+  user:
+    name: "{{ ansible_user }}"
+    groups: "docker"
+    append: "yes"
+
+- name: Enable docker daemon 
+  service:
+    name: docker 
+    enabled: yes
+    state: started
+
+- name: Test Docker with hello world example
+  shell: "docker run hello-world"
+  register: hello_world_output
+
+- name: Show output of hello word example
+  debug:
+    msg: "Container Output: {{hello_world_output.stdout}}"
+
+
+- name: Install Docker Compose
+  get_url:
+    url: https://github.com/docker/compose/releases/download/{{ DOCKER_COMPOSE_VERSION }}/docker-compose-Linux-x86_64
+    dest: "/usr/local/bin/docker-compose"
+    mode: 0755
