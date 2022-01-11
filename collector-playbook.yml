@@ -1,0 +1,10 @@
+- name: Provision Collector
+  hosts: localhost
+  become: yes
+  roles:
+  - role: docker
+    tags:
+    - docker
+  - role: collector
+    tags:
+    - collector

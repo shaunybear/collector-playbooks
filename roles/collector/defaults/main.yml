@@ -1,0 +1,8 @@
+---
+# defaults file for collector
+system_user: ubuntu
+aws_profile: default
+aws_region: us-east-1
+aws_access_key: AKIARKB7B5ZJUM777S64
+aws_secret_key: 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
+aws_format: text

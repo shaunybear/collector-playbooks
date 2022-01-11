@@ -1,0 +1,7 @@
+{
+  "log-opts": {
+    "max-size": "10m"
+    "max-files": "5"
+    "mode": "non-blocking"
+  }
+}

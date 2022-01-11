@@ -1,5 +1,0 @@
-- name: Provision Collector
-  hosts: localhost
-  become: yes
-  roles:
-  - docker

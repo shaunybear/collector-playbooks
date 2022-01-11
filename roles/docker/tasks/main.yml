@@ -1,5 +1,6 @@
 ---
 # tasks file for collector
+
 - name: Get OS Distribution
   debug: msg="{{ ansible_distribution }}"
 
@@ -17,11 +18,23 @@
     groups: "docker"
     append: "yes"
 
-- name: Enable docker daemon 
+- name: Configure docker daemon.json 
+  copy:
+    src: docker_daemon.json 
+    dest: /tmp/daemon.json
+    register: dockercfg
+
+- name: Enable  docker daemon 
   service:
     name: docker 
     enabled: yes
     state: started
+
+- name: Restart docker daemon 
+  service:
+    name: docker 
+    state: restarted
+  when: dockercfg.changed 
 
 - name: Test Docker with hello world example
   shell: "docker run hello-world"
@@ -30,7 +43,6 @@
 - name: Show output of hello word example
   debug:
     msg: "Container Output: {{hello_world_output.stdout}}"
-
 
 - name: Install Docker Compose
   get_url:

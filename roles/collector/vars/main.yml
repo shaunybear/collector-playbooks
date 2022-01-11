@@ -1,0 +1,8 @@
+---
+# vars file for collector
+awscli_packages:
+- groff
+- less
+- unzip
+
+

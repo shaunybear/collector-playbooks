@@ -1,0 +1,44 @@
+---
+- name: Install aws cli dependencies
+  package:  
+    name: "{{ item }}"
+  with_items: "{{ awscli_packages }}"
+  tags:
+  - awscli
+
+- name: Get AWS CLI 
+  unarchive: 
+    src: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+    remote_src: yes
+    dest: /tmp
+  tags:
+  - awscli
+
+- name: Install AWS CLI
+  command:
+    cmd: "/tmp/aws/install --update"
+  tags:
+  - awscli
+
+- name: Configure AWS
+  become_user: "{{ system_user }}"
+  no_log: true
+  shell: aws configure set {{ item.key }} {{ item.value }} --profile {{ aws_profile }}
+  with_dict:
+    aws_access_key_id: "{{ aws_access_key }}"
+    aws_secret_access_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+    format: "{{ aws_format }}"
+  tags:
+  - awscli 
+
+- name: Create collector directories
+  file:
+    path: /opt/collector/{{item}}
+    owner: "{{ system_user }}"
+    group: "{{ system_user }}"
+    state: directory
+  with_items:
+  - deploy
+  tags:
+  - collector_directories 
