@@ -1,5 +1,6 @@
 ---
 - name: Install aws cli dependencies
+  become: yes
   package:  
     name: "{{ item }}"
   with_items: "{{ awscli_packages }}"
@@ -7,6 +8,7 @@
   - awscli
 
 - name: Get AWS CLI 
+  become: yes
   unarchive: 
     src: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
     remote_src: yes
@@ -15,6 +17,7 @@
   - awscli
 
 - name: Install AWS CLI
+  become: yes
   command:
     cmd: "/tmp/aws/install --update"
   tags:
@@ -33,6 +36,7 @@
   - awscli 
 
 - name: Create collector directories
+  become: yes
   file:
     path: /opt/collector/{{item}}
     owner: "{{ system_user }}"
@@ -40,5 +44,11 @@
     state: directory
   with_items:
   - deploy
+
+- name: Git checkout collector deployment 
+  git:
+    repo:  ssh://senetco@senetco.kilnhg.com/EndDevices/Collector/collector-deploy
+    dest: /opt/collector/deploy/collector.git
+    accept_hostkey: yes
   tags:
-  - collector_directories 
+  - deploy

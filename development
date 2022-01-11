@@ -1,0 +1,5 @@
+[useast1_collectors]
+ansible-collector-test ansible_user=ubuntu system_user=ubuntu
+
+[useast1:children]
+useast1_collectors
